@@ -8,7 +8,15 @@ import { authUserDTO } from 'src/module/main/auth/dto/authUserDTO';
 @Injectable()
 export class UserRepository {
   constructor() {}
-  private Users: User[] = [];
+  private Users: User[] = [
+    {
+      id: '0',
+      login: 'test',
+      password: '$2a$10$e2cAlj/dEs4BTG/iO/9FMOoa.OG3AK1fYf2shVu5ESFiHJBZSYTsG',
+      email: 'pokinet@yandex.ru',
+      firstname: 'Wadim',
+    },
+  ];
 
   async createUser(data: User) {
     data.password = await getHashPassword(data.password);
@@ -28,14 +36,17 @@ export class UserRepository {
     const { login, password } = data;
     const user = this.Users.find((el) => el.login === login);
     if (!user) {
-      throw new UserExists('user not found');
+      throw new UserExists('Неправильный логин или пароль');
     }
     const validatePassword = await bcrypt.compare(password, user.password);
-
     if (validatePassword) {
     } else {
-      throw new UserExists('user not found');
+      throw new UserExists('Неправильный логин или пароль');
     }
     return user;
+  }
+
+  async getUser(id: number) {
+    return this.Users[id];
   }
 }

@@ -8,10 +8,17 @@ dotenv.config();
 @Injectable()
 export class TokenService {
   constructor(private readonly jwtService: JwtService) {}
-  async generateJwtToken(user: UserJWT) {
+
+  generateJwtToken(user: UserJWT) {
     return this.jwtService.sign(user, {
       secret: process.env.SECRET,
-      expiresIn: process.env.EXPIRE_JWT,
+      expiresIn: `${process.env.EXPIRE_JWT}m`,
+    });
+  }
+  generateRefreshJwtToken(user: UserJWT) {
+    return this.jwtService.sign(user, {
+      secret: process.env.REFSECRET,
+      expiresIn: `${process.env.REFEXPIRE_JWT}d`,
     });
   }
 }

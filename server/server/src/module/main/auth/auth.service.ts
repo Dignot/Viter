@@ -30,7 +30,22 @@ export class AuthService {
     };
 
     const token = this._tokenServis.generateJwtToken(tokenData);
+    const refToken = this._tokenServis.generateRefreshJwtToken(tokenData);
+    const tokens = {
+      token: token,
+      refToken: refToken,
+    };
+    return tokens;
+  }
 
+  async getUser(id: number) {
+    return this._userRepository.getUser(id);
+  }
+
+  async ref(data: UserJWT) {
+    console.log(data);
+    const dataJwt = { id: data.id, password: data.password };
+    const token = this._tokenServis.generateJwtToken(dataJwt);
     return token;
   }
 }
